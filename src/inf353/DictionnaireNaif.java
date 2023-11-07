@@ -1,4 +1,4 @@
-class DictionnaireNaif implements dictionnaire {
+class DictionnaireNaif implements Dictionnaire {
     public char[][] dictionnaire;
     public int taille; //taille maximale du mot
     public int N;  //nombre de mots
@@ -9,7 +9,7 @@ class DictionnaireNaif implements dictionnaire {
         this.N = 0;
         this.taille = 0;
         for (int i = 0 ; i < 100 ; i++){
-            this.dictionnaire[i][0] ="0";
+            this.dictionnaire[i][0] = "0";
         }
     }
     
