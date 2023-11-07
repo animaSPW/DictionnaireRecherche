@@ -55,6 +55,7 @@ public class DictionnaireNaif implements Dictionnaire {
 
             return "erreur : l'indice dépasse la taille";
         } 
+        
     }
     @Override 
     public boolean contient(String m){
