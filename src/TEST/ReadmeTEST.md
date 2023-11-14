@@ -47,7 +47,7 @@ methode contient(m) :  Ei : dictionnaire avec mot m
                    EF : pas de changements , on retourne vrai
 
                    EI: dictionnaire avec m n'existe pas dans ce dernier
-                   EF : sans changements, on retourne " mot non existant"
+                   EF : sans changements, on retourne faux
 
                    EI : dictionnaire avec mot null ou > 40 CHAR
                    EF: renvoie erreur mot non conforme
