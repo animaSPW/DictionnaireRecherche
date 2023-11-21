@@ -1,43 +1,74 @@
 package inf353;
 
 public class DictionnaireNaif implements Dictionnaire {
-    public char[][] dictionnaire;
-    public int taille; //taille maximale du teableau 
-    public int N;  //nombre de mots
+    private char[][] dictionnaire;
+    private int taille; //taille maximale du teableau 
+    private int N;  //nombre de mots
 
     public DictionnaireNaif(){
+
+        /* 
+            constructeur qui défine le nombre maximal à 1000 (par défaut) si  l'utilisateur l'entre pas
+            et initialise les attributs de la classe
+
+            Versions:
+            ----------
+            spécification : Ahmed Adel BEREKSI REGUIG V-1.0 (09/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.0 (09/11/2023)
+
+        */
 
         this.dictionnaire = new char[1000][40];
         this.N = 0;
         this.taille = 1000;
+
         for (int i = 0 ; i < 1000 ; i++){
+
             this.dictionnaire[i][0] = '0';
         }
     }
     
-    //n est la taille maximal du dictionnaire
     public DictionnaireNaif(int n){
+
+        /* 
+            constructeur qui défine le nombre maximal à n (définé par l'utilisateur de la classe)
+            et initialise les attributs de la classe
+            
+            Parametères:
+            -----------
+            n : le nombre maximal des mot de notre dictionnaire 'this.taille' (Int)
+
+            Versions:
+            ----------
+            spécification : Ahmed Adel BEREKSI REGUIG V-1.0 (09/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.0 (09/11/2023)
+
+        */
 
         this.dictionnaire = new char[n][40];
         this.N = 0;
         this.taille = n;
+
         for (int i = 0 ; i < n ; i++){
+
             this.dictionnaire[i][0] = '0';
         }
     }
+
 
     @Override 
     public void vider(){
 
         // Définir tout le contenu du dictionnaire par défaut
-        for (int i = 0 ; i < N; i++) {
-            for(int j = 0 ; j < taille ; j++) {
+        for (int i = 0 ; i < this.taille; i++) {
+            for(int j = 0 ; j < 40 ; j++) {
                 this.dictionnaire[i][j] = '0';
             }
         }
 
-        N=0; //Définir le nombre de mots du dictionnaire sur 0
+        this.N=0; //Définir le nombre de mots du dictionnaire sur 0
     };
+
 
     @Override 
     public void ajouterMot(String m){
@@ -91,6 +122,7 @@ public class DictionnaireNaif implements Dictionnaire {
         }
     };
 
+
     @Override 
     public int indiceMot(String m){
 
@@ -110,51 +142,80 @@ public class DictionnaireNaif implements Dictionnaire {
         }
 
         return -1;
-/*
-        while (i < N) {
-
-            i=i+1;
-            String elementCourant = new String(dictionnaire[i]);
-            if (elementCourant.equals(m)) {
-                return i;
-            }
-        }
-        return -1 ;   
-        */              
+           
     };
+
+
     @Override 
     public String motIndice(int i){
-
-        if (i < N){
+        /* 
+            fonction retourne le mot de l'indice 'i' dans notre dictionnaire
             
+            Parametères:
+            -----------
+            i : l'indice du mot (Int)
+
+            Retournes:
+            --------
+            mot : le mot de  l'indice 'i' (Str)
+
+            Versions:
+            ----------
+            spécification : Ahmed Adel BEREKSI REGUIG V-1.0 (09/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.0 (09/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.1 (14/11/2023)
+
+        */
+
+
+        //si le i ne dépasse pas la taille maximal du dictionnaire et aussi le premier élément dans la ligne 'i' n'est pas '0'
+        if (i < this.taille && this.dictionnaire[i][0]!= '0'){
+            
+            //initialisation de la variable 'mot' par le mot vide
             String mot = "";
             int j=0;   
             
-            while (this.dictionnaire[i][j]!= '0' ){
+            // tant que (la case précédente est '\' et la case courante est '0') ou bien (la case courante est déffirente de '0') alors entrer dans la boucle
+            while ( (j != 0 && ( this.dictionnaire[i][j-1] == '\\' && this.dictionnaire[i][j] == '0') ) || (this.dictionnaire[i][j]!= '0') ){
+               
+                //construire le mot de cette ligne dans le variable 'mot'
                 mot += this.dictionnaire[i][j];
                 j++;
             }
+
             return mot;
         }
         else {
 
-            return "erreur : l'indice dépasse la taille";
+            if ( i < this.taille && this.dictionnaire[i][0]== '0') {
+
+                return "";
+            }
+            else {
+
+                return "erreur : l'indice dépasse la taille";
+            }
         } 
         
     }
+
+
     @Override 
     public boolean contient(String m){
-        int i = 0;
-        while ( i < N) {
+        
+        //parcourir les lignes (tous les mots)
+        for( int line = 0 ; line < this.taille ; line++){
 
-            i=i+1;
-            String elementCourant = new String(dictionnaire[i]);
-            if (elementCourant.equals(m)) {
+            String mot = motIndice(line);
+            if (mot == m) {
+
                 return true;
             }
+        
         }
         return false;
     };
+
     @Override 
     public int nbMots(){
         
@@ -162,78 +223,69 @@ public class DictionnaireNaif implements Dictionnaire {
     };
     @Override 
     public boolean contientPrefixe(String p){
-        if (p == null || p.isEmpty()) {
-            return false;
-        }
 
-        for (int i = 0; i < dictionnaire.length; i++) {
-            if (dictionnaire[i][0] != '0' && new String(dictionnaire[i]).startsWith(p)) {
+        //parcourir les lignes (tous les mots)
+        for( int line = 0 ; line < this.taille ; line++){
+
+            String mot = motIndice(line);
+            if (mot.startsWith(p)) {
+
                 return true;
             }
+        
         }
-
         return false;
+        
     };
     @Override 
     public String plusLongPrefixeDe(String mot){
        
         /* 
-            fonction returns the bigest prefix of all words in the dictionary 
+            fonction retourne le plus grand préfixe dans notre dictionnaire 
+            et qui est au même temp un mot dans le dictionnaire.
             
-            Parameters:
+            Parametères:
             -----------
-            mot : word that have the biggest prefix (Str)
+            mot : le mot cherché qui contient le préfixe (Str)
 
-            Returns:
+            Retournes:
             --------
-            prefixe : the biggest prefix in dictionary (Str)
+            prefixe : le plus grand préfixe du dictionnaire (Str)
 
             Versions:
             ----------
-            specefication : Ahmed Adel BEREKSI REGUIG V-1.0 (12/11/2023)
-            implementation : Ahmed Adel BEREKSI REGUIG  V-1.0 (12/11/2023)
+            spécification : Ahmed Adel BEREKSI REGUIG V-1.0 (12/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.0 (12/11/2023)
+            implémentation : Ahmed Adel BEREKSI REGUIG  V-1.1 (14/11/2023)
 
         */
 
-
-        String prefixe = "";
         
-        //parcourir toutes les lignes (chaque ligne représente un mot)
-        for (int line = 0 ; line < this.taille ; line++) {
 
-            String mot_temporaire = "";
+        String prefixe = mot;
 
-            //lire le mot de cette ligne
-            for (int column = 0 ; column < 40 ; column++){
+        //variant :    préfixe courant = ancient préfixe sauf le dernier caractère    et é.i: ancient préfixe = mot
+        while (prefixe != "") {
 
-                //si on trouve la marque de fin du mot
-                if ( this.dictionnaire[line][column] == '0' ){
-                    break;
-                }
-                //sinon on fait la concaténation de ce caractère avec la variable mot_temporaire
-                else {
-                    mot_temporaire += this.dictionnaire[line][column];
-                }
-            }
+            //parcourire tous les mot du dictionnaire 
+            for (int line = 0 ; line < this.taille ; line++) {
 
-            //si le mot_temporaire contient le mot (donc il existe un préfixe)
-            if (mot_temporaire.contains(mot)) {
+                //extrraire le mot de cette ligne
+                String mot_tmp = motIndice(line);
 
-                String prefixe_temporaire = "";
+                //si ce mot == préfixe donc c'est le plus grand préfixe
+                if (mot_tmp == prefixe){
 
-                //extraire le préfixe temporaire 
-                prefixe_temporaire = mot_temporaire.substring(0, mot_temporaire.indexOf(mot) -1);
-
-                //affecter le préfixe le plus grand à la variable prefixe
-                if (prefixe_temporaire.length() >= prefixe.length()) {
-
-                    prefixe = prefixe_temporaire;
+                    return prefixe;
                 }
             }
 
+            //préfixe courant = ancient préfixe sauf le dernier caractère 
+            prefixe = prefixe.substring(0,prefixe.length() - 1);
 
         }
 
+        //le plus grand préfixe est le mot vide "" donc il n'existe pas
         return prefixe;
     };
 
